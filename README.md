@@ -5,3 +5,5 @@ Write by MacroSTAR Studio
 
 贡献者：
 [RBC-AE3803](https://github.com/RBC-AE3803/)
+[DeepSeek](https://chat.deepseek.com)
+[Albert Xia](https://github.com/MS-AlbertXia)
