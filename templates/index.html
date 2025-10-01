@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lunar X BOT WebUI</title>
+    <title>Lunar X框架机器人控制面板</title>
     <style>
         :root {
             --primary-color: #6c5ce7;
@@ -23,7 +23,7 @@
         }
         
         body {
-            background: url('https://api.ae3803.top/cells-at-work') no-repeat center center fixed;
+            background: url('background.png') no-repeat center center fixed;
             background-size: cover;
             color: var(--light-color);
             min-height: 100vh;
@@ -314,10 +314,10 @@
     <div class="container">
         <div class="sidebar">
             <div class="sidebar-header">
-                <h1>Lunar X BOT</h1>
+                <h1>Lunar X 控制面板</h1>
             </div>
             <div class="nav-item active" data-tab="protocol">
-                <i>⚙️</i> 协议端配置
+                <i>🔗</i> 协议端配置
             </div>
             <div class="nav-item" data-tab="bot">
                 <i>🤖</i> Bot端配置
@@ -334,96 +334,96 @@
             <div class="tab-content active" id="protocol">
                 <div class="card">
                     <div class="card-header">
-                        <h2>协议端配置</h2>
+                        <h2>🔗 协议端配置</h2>
                     </div>
                     <div class="form-group">
-                        <label for="signServerUrl">SignServer URL</label>
-                        <input type="text" id="signServerUrl" placeholder="https://sign.lagrangecore.org/api/sign/39038">
+                        <label for="signServerUrl">🔗 SignServer URL</label>
+                        <input type="text" id="signServerUrl" placeholder="Example: https://sign.lagrangecore.org/api/sign/3803">
                     </div>
                     <div class="form-group">
-                        <label for="host">主机地址</label>
-                        <input type="text" id="host" placeholder="127.0.0.1">
+                        <label for="host">💻 主机地址</label>
+                        <input type="text" id="host" placeholder="Example: 127.0.0.1">
                     </div>
                     <div class="form-group">
-                        <label for="port">端口</label>
-                        <input type="number" id="port" placeholder="3803">
+                        <label for="port">🔌 端口</label>
+                        <input type="number" id="port" placeholder="Example: 3803">
                     </div>
                     <div class="form-group">
-                        <label for="accessToken">Access Token</label>
-                        <input type="text" id="accessToken" placeholder="114514">
+                        <label for="accessToken">🔑 Access Token</label>
+                        <input type="text" id="accessToken" placeholder="Example: 114514">
                     </div>
                     <div class="form-group">
-                        <label for="uin">QQ号</label>
-                        <input type="number" id="uin" placeholder="123456789">
+                        <label for="uin">🐧 QQ号</label>
+                        <input type="number" id="uin" placeholder="Example: 123456789">
                     </div>
-                    <button onclick="saveProtocolConfig()">保存配置</button>
+                    <button onclick="saveProtocolConfig()">💾 保存配置</button>
                 </div>
             </div>
             
             <div class="tab-content" id="bot">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Bot端配置</h2>
+                        <h2>🤖 Bot端配置</h2>
                     </div>
                     <div class="form-group">
-                        <label for="botName">机器人中文名</label>
-                        <input type="text" id="botName" placeholder="Lunar X">
+                        <label for="botName">🇨🇳 机器人中文名</label>
+                        <input type="text" id="botName" placeholder="Example: 苏清颜">
                     </div>
                     <div class="form-group">
-                        <label for="botNameEn">机器人英文名</label>
-                        <input type="text" id="botNameEn" placeholder="Lunar">
+                        <label for="botNameEn">🇬🇧 机器人英文名</label>
+                        <input type="text" id="botNameEn" placeholder="Example: Claire">
                     </div>
                     <div class="form-group">
-                        <label for="triggerKeyword">触发词</label>
-                        <input type="text" id="triggerKeyword" placeholder="$">
+                        <label for="triggerKeyword">📚 触发词</label>
+                        <input type="text" id="triggerKeyword" placeholder="Example: ！">
                     </div>
                     <div class="form-group">
-                        <label for="autoReloadPlugins">自动重载插件</label>
+                        <label for="autoReloadPlugins">🔄 自动重载插件</label>
                         <select id="autoReloadPlugins">
-                            <option value="true">是</option>
-                            <option value="false">否</option>
+                            <option value="true">✅ 是</option>
+                            <option value="false">❎ 否</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="logLevel">日志等级</label>
+                        <label for="logLevel">📝 日志等级</label>
                         <select id="logLevel">
-                            <option value="DEBUG">DEBUG</option>
-                            <option value="INFO">INFO</option>
-                            <option value="WARNING">WARNING</option>
-                            <option value="ERROR">ERROR</option>
-                            <option value="CRITICAL">CRITICAL</option>
+                            <option value="INFO">ℹ️ INFO</option>
+                            <option value="DEBUG">🔍 DEBUG</option>
+                            <option value="WARNING">⚠️ WARNING</option>
+                            <option value="ERROR">❌ ERROR</option>
+                            <option value="CRITICAL">🚨 CRITICAL</option>
                         </select>
                     </div>
-                    <button onclick="saveBotConfig()">保存配置</button>
+                    <button onclick="saveBotConfig()">💾 保存配置</button>
                 </div>
             </div>
             
             <div class="tab-content" id="plugins">
                 <div class="card">
                     <div class="card-header">
-                        <h2>插件源设置</h2>
+                        <h2>🧩 插件源设置</h2>
                     </div>
                     <div class="form-group">
-                        <label>PyPI镜像源设置</label>
+                        <label>♾ PyPI镜像源设置</label>
                         <div style="display: flex; gap: 10px; align-items: center;">
                             <input type="checkbox" id="usePypiMirror" style="width: auto;">
                             <label for="usePypiMirror" style="display: inline;">使用PyPI镜像源</label>
                         </div>
-                        <input type="text" id="pypiMirror" placeholder="https://pypi.tuna.tsinghua.edu.cn/simple" style="margin-top: 10px;">
+                        <input type="text" id="pypiMirror" placeholder="Example: https://pypi.tuna.tsinghua.edu.cn/simple" style="margin-top: 10px;">
                     </div>
                     <div class="form-group">
                         <label for="githubMirror">GitHub镜像代理 (用于下载和README，例如: https://ghproxy.com/)</label>
-                        <input type="text" id="githubMirror" placeholder="https://ghproxy.com/">
+                        <input type="text" id="githubMirror" placeholder="Example: https://ghproxy.com/">
                         <small style="color: rgba(255,255,255,0.7);">此代理仅用于加速下载插件文件和README，不用于GitHub API请求。</small>
                     </div>
                     <div class="form-group">
                         <label for="githubPat">GitHub 个人访问令牌 (PAT) - 用于避免API速率限制</label>
-                        <input type="password" id="githubPat" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+                        <input type="password" id="githubPat" placeholder="Example: ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
                         <small style="color: rgba(255,255,255,0.7);">在GitHub设置中生成，需要repo权限。不填可能遇到API速率限制。</small>
                     </div>
                     <div class="form-group">
                         <label for="pluginsIndexRepo">插件索引仓库 (例如: IntelliMarkets/Jianer_Plugins_Index)</label>
-                        <input type="text" id="pluginsIndexRepo" placeholder="IntelliMarkets/Jianer_Plugins_Index">
+                        <input type="text" id="pluginsIndexRepo" placeholder="Example: IntelliMarkets/Jianer_Plugins_Index">
                         <small style="color: rgba(255,255,255,0.7);">格式为 `所有者/仓库名`。</small>
                     </div>
                     <button onclick="saveWebuiConfig()">保存设置</button>
@@ -451,17 +451,17 @@
             <div class="tab-content" id="users">
                 <div class="card">
                     <div class="card-header">
-                        <h2>用户管理</h2>
+                        <h2>👥 用户管理</h2>
                     </div>
                     <div class="form-group">
-                        <label for="superUsers">超级用户 (逗号分隔的QQ号)</label>
-                        <textarea id="superUsers" placeholder="987654321"></textarea>
+                        <label for="superUsers">👑 超级用户 (逗号分隔的QQ号)</label>
+                        <textarea id="superUsers" placeholder="Example: 987654321"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="managerUsers">管理用户 (逗号分隔的QQ号)</label>
-                        <textarea id="managerUsers" placeholder="123456789,987654321,2473768771"></textarea>
+                        <label for="managerUsers">🔧 管理用户 (逗号分隔的QQ号)</label>
+                        <textarea id="managerUsers" placeholder="Example: 123456789,987654321,2473768771"></textarea>
                     </div>
-                    <button onclick="saveUserConfig()">保存配置</button>
+                    <button onclick="saveUserConfig()">💾 保存配置</button>
                 </div>
             </div>
         </div>
@@ -470,7 +470,7 @@
     <div class="modal" id="pluginDetailModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalPluginName">插件详情</h2>
+                <h2 id="modalPluginName">🧩 插件详情</h2>
                 <span class="close" onclick="closeModal('pluginDetailModal')">&times;</span>
             </div>
             <div id="modalPluginContent">
@@ -496,7 +496,7 @@
                 <label for="installPluginPath">插件在zip包中的子路径</label>
                 <input type="text" id="installPluginPath" readonly>
             </div>
-            <button id="installPluginBtn" onclick="installPlugin()">安装</button>
+            <button id="installPluginBtn" onclick="installPlugin()">🔽 安装</button>
             <div id="installProgress" style="margin-top: 20px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; max-height: 200px; overflow-y: auto; display: none;">
                 <pre id="installProgressLog" style="white-space: pre-wrap; word-wrap: break-word; color: var(--light-color);"></pre>
             </div>
@@ -505,11 +505,11 @@
     
     <div class="confirm-dialog" id="confirmDialog">
         <div class="confirm-content">
-            <h2 id="confirmTitle">确认操作</h2>
+            <h2 id="confirmTitle">✔ 确认操作</h2>
             <p id="confirmMessage">您确定要执行此操作吗？</p>
             <div class="confirm-buttons">
-                <button onclick="confirmAction(false)">取消</button>
-                <button class="btn-danger" onclick="confirmAction(true)">确认</button>
+                <button onclick="confirmAction(false)">❎ 取消</button>
+                <button class="btn-danger" onclick="confirmAction(true)">✅ 确认</button>
             </div>
         </div>
     </div>
