@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lunar X BOT WebUI</title>
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --accent-color: #fd79a8;
+            --dark-color: #2d3436;
+            --light-color: #ff0000;
+            --glass-bg: rgba(255, 255, 255, 0.001);
+            --glass-border: rgba(255, 255, 255, 0.001);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: url('https://api.ae3803.top/cells-at-work') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--light-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            display: flex;
+            flex: 1;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
+            border-right: 1px solid var(--glass-border);
+            padding: 20px 0;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            opacity: 0.8;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-header h1 {
+            font-size: 1.5rem;
+            color: var(--light-color);
+        }
+        
+        .nav-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .nav-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        
+        .card-header {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--light-color);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--light-color);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 5px;
+            color: var(--light-color);
+            outline: none;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-color);
+        }
+        
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        button:hover {
+            background: var(--secondary-color);
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+        }
+        
+        .btn-success:hover {
+            background: #219653;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .plugin-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .plugin-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .plugin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .plugin-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .plugin-status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: white;
+        }
+        
+        .status-enabled {
+            background: #27ae60;
+        }
+        
+        .status-disabled {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(1px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .close {
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: var(--dark-color);
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+        
+        .toast.success {
+            background: #27ae60;
+        }
+        
+        .toast.error {
+            background: #e74c3c;
+        }
+        
+        .confirm-dialog {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(1px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .confirm-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+        }
+        
+        .confirm-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Lunar X BOT</h1>
+            </div>
+            <div class="nav-item active" data-tab="protocol">
+                <i>⚙️</i> 协议端配置
+            </div>
+            <div class="nav-item" data-tab="bot">
+                <i>🤖</i> Bot端配置
+            </div>
+            <div class="nav-item" data-tab="plugins">
+                <i>🧩</i> 插件管理
+            </div>
+            <div class="nav-item" data-tab="users">
+                <i>👥</i> 用户管理
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="tab-content active" id="protocol">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>协议端配置</h2>
+                    </div>
+                    <div class="form-group">
+                        <label for="signServerUrl">SignServer URL</label>
+                        <input type="text" id="signServerUrl" placeholder="https://sign.lagrangecore.org/api/sign/39038">
+                    </div>
+                    <div class="form-group">
+                        <label for="host">主机地址</label>
+                        <input type="text" id="host" placeholder="127.0.0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="port">端口</label>
+                        <input type="number" id="port" placeholder="3803">
+                    </div>
+                    <div class="form-group">
+                        <label for="accessToken">Access Token</label>
+                        <input type="text" id="accessToken" placeholder="114514">
+                    </div>
+                    <div class="form-group">
+                        <label for="uin">QQ号</label>
+                        <input type="number" id="uin" placeholder="123456789">
+                    </div>
+                    <button onclick="saveProtocolConfig()">保存配置</button>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="bot">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Bot端配置</h2>
+                    </div>
+                    <div class="form-group">
+                        <label for="botName">机器人中文名</label>
+                        <input type="text" id="botName" placeholder="Lunar X">
+                    </div>
+                    <div class="form-group">
+                        <label for="botNameEn">机器人英文名</label>
+                        <input type="text" id="botNameEn" placeholder="Lunar">
+                    </div>
+                    <div class="form-group">
+                        <label for="triggerKeyword">触发词</label>
+                        <input type="text" id="triggerKeyword" placeholder="$">
+                    </div>
+                    <div class="form-group">
+                        <label for="autoReloadPlugins">自动重载插件</label>
+                        <select id="autoReloadPlugins">
+                            <option value="true">是</option>
+                            <option value="false">否</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="logLevel">日志等级</label>
+                        <select id="logLevel">
+                            <option value="DEBUG">DEBUG</option>
+                            <option value="INFO">INFO</option>
+                            <option value="WARNING">WARNING</option>
+                            <option value="ERROR">ERROR</option>
+                            <option value="CRITICAL">CRITICAL</option>
+                        </select>
+                    </div>
+                    <button onclick="saveBotConfig()">保存配置</button>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="plugins">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>插件源设置</h2>
+                    </div>
+                    <div class="form-group">
+                        <label>PyPI镜像源设置</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="checkbox" id="usePypiMirror" style="width: auto;">
+                            <label for="usePypiMirror" style="display: inline;">使用PyPI镜像源</label>
+                        </div>
+                        <input type="text" id="pypiMirror" placeholder="https://pypi.tuna.tsinghua.edu.cn/simple" style="margin-top: 10px;">
+                    </div>
+                    <div class="form-group">
+                        <label for="githubMirror">GitHub镜像代理 (用于下载和README，例如: https://ghproxy.com/)</label>
+                        <input type="text" id="githubMirror" placeholder="https://ghproxy.com/">
+                        <small style="color: rgba(255,255,255,0.7);">此代理仅用于加速下载插件文件和README，不用于GitHub API请求。</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="githubPat">GitHub 个人访问令牌 (PAT) - 用于避免API速率限制</label>
+                        <input type="password" id="githubPat" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+                        <small style="color: rgba(255,255,255,0.7);">在GitHub设置中生成，需要repo权限。不填可能遇到API速率限制。</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="pluginsIndexRepo">插件索引仓库 (例如: IntelliMarkets/Jianer_Plugins_Index)</label>
+                        <input type="text" id="pluginsIndexRepo" placeholder="IntelliMarkets/Jianer_Plugins_Index">
+                        <small style="color: rgba(255,255,255,0.7);">格式为 `所有者/仓库名`。</small>
+                    </div>
+                    <button onclick="saveWebuiConfig()">保存设置</button>
+                    <button onclick="loadAvailablePlugins()" style="margin-left: 10px;">刷新可用插件列表</button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>已安装插件</h2>
+                    </div>
+                    <div id="installedPlugins" class="plugin-list">
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>可用插件</h2>
+                    </div>
+                    <p id="loadingAvailablePlugins" style="display: none; font-style: italic;">正在获取可用插件列表，请稍候...</p>
+                    <div id="availablePlugins" class="plugin-list">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="users">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>用户管理</h2>
+                    </div>
+                    <div class="form-group">
+                        <label for="superUsers">超级用户 (逗号分隔的QQ号)</label>
+                        <textarea id="superUsers" placeholder="987654321"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="managerUsers">管理用户 (逗号分隔的QQ号)</label>
+                        <textarea id="managerUsers" placeholder="123456789,987654321,2473768771"></textarea>
+                    </div>
+                    <button onclick="saveUserConfig()">保存配置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="pluginDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalPluginName">插件详情</h2>
+                <span class="close" onclick="closeModal('pluginDetailModal')">&times;</span>
+            </div>
+            <div id="modalPluginContent">
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="installPluginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>安装插件</h2>
+                <span class="close" onclick="closeModal('installPluginModal')">&times;</span>
+            </div>
+            <div class="form-group">
+                <label for="installPluginUrl">插件下载URL (整个仓库的zip包)</label>
+                <input type="text" id="installPluginUrl" readonly>
+            </div>
+            <div class="form-group">
+                <label for="installPluginName">插件名称</label>
+                <input type="text" id="installPluginName" readonly>
+            </div>
+            <div class="form-group">
+                <label for="installPluginPath">插件在zip包中的子路径</label>
+                <input type="text" id="installPluginPath" readonly>
+            </div>
+            <button id="installPluginBtn" onclick="installPlugin()">安装</button>
+            <div id="installProgress" style="margin-top: 20px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; max-height: 200px; overflow-y: auto; display: none;">
+                <pre id="installProgressLog" style="white-space: pre-wrap; word-wrap: break-word; color: var(--light-color);"></pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="confirm-dialog" id="confirmDialog">
+        <div class="confirm-content">
+            <h2 id="confirmTitle">确认操作</h2>
+            <p id="confirmMessage">您确定要执行此操作吗？</p>
+            <div class="confirm-buttons">
+                <button onclick="confirmAction(false)">取消</button>
+                <button class="btn-danger" onclick="confirmAction(true)">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        let currentPluginName = '';
+        let confirmCallback = null;
+        let pluginsIndexRepoNameOnly = '';
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                
+                this.classList.add('active');
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+                
+                if (tabId === 'plugins') {
+                    loadInstalledPlugins();
+                    loadAvailablePlugins();
+                }
+            });
+        });
+        
+        function showToast(message, type = '') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast';
+            if (type) toast.classList.add(type);
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        
+        function showConfirm(title, message, callback) {
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+            confirmCallback = callback;
+            document.getElementById('confirmDialog').style.display = 'flex';
+        }
+        
+        function confirmAction(result) {
+            document.getElementById('confirmDialog').style.display = 'none';
+            if (confirmCallback) {
+                confirmCallback(result);
+                confirmCallback = null;
+            }
+        }
+        
+        async function loadConfigs() {
+            try {
+                const protocolRes = await fetch('/api/config/appsettings');
+                const protocolData = await protocolRes.json();
+                
+                if (!protocolRes.ok) throw new Error(protocolData.error);
+                
+                document.getElementById('signServerUrl').value = protocolData.SignServerUrl || '';
+                if (protocolData.Implementations && protocolData.Implementations.length > 0) {
+                    document.getElementById('host').value = protocolData.Implementations[0].Host || '';
+                    document.getElementById('port').value = protocolData.Implementations[0].Port || '';
+                    document.getElementById('accessToken').value = protocolData.Implementations[0].AccessToken || '';
+                } else {
+                    document.getElementById('host').value = '127.0.0.1';
+                    document.getElementById('port').value = '3803';
+                    document.getElementById('accessToken').value = '114514';
+                }
+                document.getElementById('uin').value = protocolData.Account.Uin || '';
+                
+                const botRes = await fetch('/api/config/config');
+                const botData = await botRes.json();
+                
+                if (!botRes.ok) throw new Error(botData.error);
+                
+                document.getElementById('botName').value = botData.bot_name || '';
+                document.getElementById('botNameEn').value = botData.bot_name_en || '';
+                document.getElementById('triggerKeyword').value = botData.trigger_keyword || '';
+                document.getElementById('autoReloadPlugins').value = botData.auto_reload_plugins ? 'true' : 'false';
+                document.getElementById('logLevel').value = botData.log_level || 'INFO';
+                
+                const userRes = await fetch('/api/config/admin');
+                const userData = await userRes.json();
+                
+                if (!userRes.ok) throw new Error(userData.error);
+                
+                document.getElementById('superUsers').value = userData.super_users.join(',') || '';
+                document.getElementById('managerUsers').value = userData.manager_users.join(',') || '';
+                
+                const webuiRes = await fetch('/api/config/webui');
+                const webuiData = await webuiRes.json();
+                
+                if (!webuiRes.ok) throw new Error(webuiData.error);
+                
+                document.getElementById('usePypiMirror').checked = webuiData.use_pypi_mirror || false;
+                document.getElementById('pypiMirror').value = webuiData.pypi_mirror || '';
+                document.getElementById('githubMirror').value = webuiData.github_mirror || '';
+                document.getElementById('githubPat').value = webuiData.github_pat || '';
+                document.getElementById('pluginsIndexRepo').value = webuiData.plugins_index_repo || 'IntelliMarkets/Jianer_Plugins_Index';
+                
+                pluginsIndexRepoNameOnly = (webuiData.plugins_index_repo || 'IntelliMarkets/Jianer_Plugins_Index').split('/').pop();
+
+                loadInstalledPlugins();
+                loadAvailablePlugins();
+                
+            } catch (error) {
+                showToast('加载配置失败: ' + error.message, 'error');
+            }
+        }
+        
+        async function saveProtocolConfig() {
+            try {
+                const protocolRes = await fetch('/api/config/appsettings');
+                const protocolData = await protocolRes.json();
+                
+                if (!protocolRes.ok) throw new Error(protocolData.error);
+                
+                protocolData.SignServerUrl = document.getElementById('signServerUrl').value;
+                
+                if (!protocolData.Implementations || protocolData.Implementations.length === 0) {
+                    protocolData.Implementations = [{
+                        "Type": "ForwardWebSocket",
+                        "Host": "127.0.0.1",
+                        "Port": 3803,
+                        "HeartBeatInterval": 5000,
+                        "AccessToken": "114514"
+                    }];
+                }
+                protocolData.Implementations[0].Host = document.getElementById('host').value;
+                protocolData.Implementations[0].Port = parseInt(document.getElementById('port').value);
+                protocolData.Implementations[0].AccessToken = document.getElementById('accessToken').value;
+                protocolData.Account.Uin = parseInt(document.getElementById('uin').value);
+                
+                const saveRes = await fetch('/api/config/appsettings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(protocolData)
+                });
+                
+                const saveData = await saveRes.json();
+                
+                if (!saveRes.ok) throw new Error(saveData.error);
+                
+                showToast('协议端配置已保存', 'success');
+            } catch (error) {
+                showToast('保存失败: ' + error.message, 'error');
+            }
+        }
+        
+        async function saveBotConfig() {
+            try {
+                const botRes = await fetch('/api/config/config');
+                const botData = await botRes.json();
+                
+                if (!botRes.ok) throw new Error(botData.error);
+                
+                botData.bot_name = document.getElementById('botName').value;
+                botData.bot_name_en = document.getElementById('botNameEn').value;
+                botData.trigger_keyword = document.getElementById('triggerKeyword').value;
+                botData.auto_reload_plugins = document.getElementById('autoReloadPlugins').value === 'true';
+                botData.log_level = document.getElementById('logLevel').value;
+                
+                const saveRes = await fetch('/api/config/config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(botData)
+                });
+                
+                const saveData = await saveRes.json();
+                
+                if (!saveRes.ok) throw new Error(saveData.error);
+                
+                showToast('Bot端配置已保存', 'success');
+            } catch (error) {
+                showToast('保存失败: ' + error.message, 'error');
+            }
+        }
+        
+        async function saveUserConfig() {
+            try {
+                const userRes = await fetch('/api/config/admin');
+                const userData = await userRes.json();
+                
+                if (!userRes.ok) throw new Error(userData.error);
+                
+                const superUsers = document.getElementById('superUsers').value
+                    .split(',')
+                    .map(id => parseInt(id.trim()))
+                    .filter(id => !isNaN(id));
+                
+                const managerUsers = document.getElementById('managerUsers').value
+                    .split(',')
+                    .map(id => parseInt(id.trim()))
+                    .filter(id => !isNaN(id));
+                
+                userData.super_users = superUsers;
+                userData.manager_users = managerUsers;
+                
+                const saveRes = await fetch('/api/config/admin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+                
+                const saveData = await saveRes.json();
+                
+                if (!saveRes.ok) throw new Error(saveData.error);
+                
+                showToast('用户配置已保存', 'success');
+            } catch (error) {
+                showToast('保存失败: ' + error.message, 'error');
+            }
+        }
+        
+        async function saveWebuiConfig() {
+            try {
+                const webuiRes = await fetch('/api/config/webui');
+                const webuiData = await webuiRes.json();
+                
+                if (!webuiRes.ok) throw new Error(webuiData.error);
+                
+                webuiData.use_pypi_mirror = document.getElementById('usePypiMirror').checked;
+                webuiData.pypi_mirror = document.getElementById('pypiMirror').value;
+                webuiData.github_mirror = document.getElementById('githubMirror').value;
+                webuiData.github_pat = document.getElementById('githubPat').value;
+                webuiData.plugins_index_repo = document.getElementById('pluginsIndexRepo').value;
+                
+                pluginsIndexRepoNameOnly = (webuiData.plugins_index_repo || 'IntelliMarkets/Jianer_Plugins_Index').split('/').pop();
+
+                const saveRes = await fetch('/api/config/webui', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(webuiData)
+                });
+                
+                const saveData = await saveRes.json();
+                
+                if (!saveRes.ok) throw new Error(saveData.error);
+                
+                showToast('WebUI配置已保存', 'success');
+            } catch (error) {
+                showToast('保存失败: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadInstalledPlugins() {
+            try {
+                const res = await fetch('/api/plugins');
+                const data = await res.json();
+                console.log("Installed plugins data:", data);
+                
+                if (!res.ok) throw new Error(data.error);
+                
+                const pluginsContainer = document.getElementById('installedPlugins');
+                pluginsContainer.innerHTML = '';
+                
+                if (data.length === 0) {
+                    pluginsContainer.innerHTML = '<p>没有安装任何插件</p>';
+                    return;
+                }
+                
+                data.forEach(plugin => {
+                    const pluginCard = document.createElement('div');
+                    pluginCard.className = 'plugin-card';
+                    
+                    pluginCard.innerHTML = `
+                        <div class="plugin-header">
+                            <h3>${plugin.name}</h3>
+                            <span class="plugin-status ${plugin.enabled ? 'status-enabled' : 'status-disabled'}">
+                                ${plugin.enabled ? '已启用' : '已禁用'}
+                            </span>
+                        </div>
+                        <p>类型: ${plugin.type === 'directory' ? '文件夹插件' : '单文件插件'}</p>
+                        <div class="plugin-actions">
+                            <button onclick="togglePlugin('${plugin.name}')">
+                                ${plugin.enabled ? '禁用' : '启用'}
+                            </button>
+                            ${plugin.has_help ? `<button onclick="showPluginDetail('${plugin.name}')">详情</button>` : ''}
+                            <button class="btn-danger" onclick="showUninstallConfirm('${plugin.name}')">卸载</button>
+                        </div>
+                    `;
+                    
+                    pluginsContainer.appendChild(pluginCard);
+                });
+            } catch (error) {
+                showToast('加载已安装插件失败: ' + error.message, 'error');
+            }
+        }
+        
+        function showUninstallConfirm(pluginName) {
+            currentPluginName = pluginName;
+            showConfirm('确认卸载', `确定要卸载插件 "${pluginName}" 吗？`, uninstallPluginConfirm);
+        }
+        
+        async function uninstallPluginConfirm(confirm) {
+            if (!confirm) return;
+            
+            try {
+                const res = await fetch(`/api/plugins/${encodeURIComponent(currentPluginName)}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await res.json();
+                
+                if (!res.ok) throw new Error(data.error);
+                
+                showToast(data.message, 'success');
+                await loadInstalledPlugins();
+                await loadAvailablePlugins();
+            } catch (error) {
+                showToast('卸载失败: ' + error.message, 'error');
+            }
+        }
+        
+        async function togglePlugin(pluginName) {
+            try {
+                const res = await fetch(`/api/plugins/${encodeURIComponent(pluginName)}`, {
+                    method: 'PUT'
+                });
+                
+                const data = await res.json();
+                
+                if (!res.ok) throw new Error(data.error);
+                
+                showToast(data.message, 'success');
+                loadInstalledPlugins();
+            } catch (error) {
+                showToast('操作失败: ' + error.message, 'error');
+            }
+        }
+        
+        async function showPluginDetail(pluginName) {
+            try {
+                const res = await fetch(`/api/plugins/${encodeURIComponent(pluginName)}`);
+                const data = await res.json();
+                
+                if (!res.ok) throw new Error(data.error);
+                
+                document.getElementById('modalPluginName').textContent = data.name;
+                document.getElementById('modalPluginContent').innerHTML = `
+                    <p><strong>类型:</strong> ${data.type === 'directory' ? '文件夹插件' : '单文件插件'}</p>
+                    <div style="margin-top: 15px;">
+                        <h3>帮助文档</h3>
+                        <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; margin-top: 10px; white-space: pre-wrap; color: var(--light-color);">
+                            ${data.help}
+                        </div>
+                    </div>
+                `;
+                
+                openModal('pluginDetailModal');
+            } catch (error) {
+                showToast('加载插件详情失败: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadAvailablePlugins() {
+            const loadingMessage = document.getElementById('loadingAvailablePlugins');
+            const pluginsContainer = document.getElementById('availablePlugins');
+            
+            pluginsContainer.innerHTML = '';
+            loadingMessage.style.display = 'block';
+
+            try {
+                const res = await fetch('/api/available_plugins');
+                const data = await res.json();
+                console.log("Available plugins data:", data);
+                
+                loadingMessage.style.display = 'none';
+
+                if (!res.ok) {
+                    pluginsContainer.innerHTML = `<p style="color: var(--light-color);">错误: ${data.error}</p>`;
+                    throw new Error(data.error);
+                }
+                
+                if (data.length === 0) {
+                    pluginsContainer.innerHTML = '<p>没有可用插件</p>';
+                    return;
+                }
+                
+                data.forEach(plugin => {
+                    const pluginCard = document.createElement('div');
+                    pluginCard.className = 'plugin-card';
+                    
+                    pluginCard.innerHTML = `
+                        <div class="plugin-header">
+                            <h3>${plugin.name}</h3>
+                        </div>
+                        <p>${plugin.description}</p>
+                        <div class="plugin-actions">
+                            <button class="btn-success" onclick="prepareInstallPlugin('${plugin.name}', '${plugin.url}', '${plugin.path}')">安装</button>
+                        </div>
+                    `;
+                    
+                    pluginsContainer.appendChild(pluginCard);
+                });
+            } catch (error) {
+                loadingMessage.style.display = 'none';
+                showToast('加载可用插件失败: ' + error.message, 'error');
+            }
+        }
+        
+        function prepareInstallPlugin(name, url, path) {
+            document.getElementById('installPluginName').value = name;
+            document.getElementById('installPluginUrl').value = url;
+            document.getElementById('installPluginPath').value = path;
+            
+            const installPluginBtn = document.getElementById('installPluginBtn');
+            const installProgressDiv = document.getElementById('installProgress');
+            const installProgressLog = document.getElementById('installProgressLog');
+            installPluginBtn.disabled = false;
+            installProgressDiv.style.display = 'block';
+            installProgressLog.textContent = '准备安装...\n';
+            installProgressLog.scrollTop = installProgressLog.scrollHeight;
+
+            openModal('installPluginModal');
+        }
+        
+        async function installPlugin() {
+            const installPluginBtn = document.getElementById('installPluginBtn');
+            const installProgressDiv = document.getElementById('installProgress');
+            const installProgressLog = document.getElementById('installProgressLog');
+
+            installPluginBtn.disabled = true;
+            installProgressDiv.style.display = 'block';
+            installProgressLog.textContent = '开始安装...\n';
+            installProgressLog.scrollTop = installProgressLog.scrollHeight;
+
+            const name = document.getElementById('installPluginName').value;
+            const url = document.getElementById('installPluginUrl').value;
+            const path = document.getElementById('installPluginPath').value;
+            const usePypiMirror = document.getElementById('usePypiMirror').checked;
+            const pypiMirror = document.getElementById('pypiMirror').value;
+
+            if (!name) {
+                installProgressLog.textContent += '\n错误: 插件名称不能为空';
+                installProgressLog.scrollTop = installProgressLog.scrollHeight;
+                showToast('安装失败: 插件名称不能为空', 'error');
+                installPluginBtn.disabled = false;
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/plugins', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        url: url,
+                        path: path,
+                        use_pypi_mirror: usePypiMirror,
+                        pypi_mirror: pypiMirror,
+                        plugins_index_repo_name_only: pluginsIndexRepoNameOnly
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    let events = buffer.split('\n\n');
+                    buffer = events.pop();
+
+                    for (const event of events) {
+                        if (event.startsWith('data: ')) {
+                            const message = event.substring(6);
+                            if (message === 'INSTALL_SUCCESS') {
+                                installProgressLog.textContent += '\n安装成功！';
+                                installProgressLog.scrollTop = installProgressLog.scrollHeight;
+                                showToast('插件安装成功', 'success');
+                                await loadInstalledPlugins();
+                                await loadAvailablePlugins();
+                                closeModal('installPluginModal');
+                                return;
+                            } else if (message === 'INSTALL_FAILED') {
+                                installProgressLog.textContent += '\n安装失败。';
+                                installProgressLog.scrollTop = installProgressLog.scrollHeight;
+                                showToast('插件安装失败', 'error');
+                                return;
+                            } else {
+                                installProgressLog.textContent += `\n${message}`;
+                                installProgressLog.scrollTop = installProgressLog.scrollHeight;
+                            }
+                        }
+                    }
+                }
+                installProgressLog.textContent += '\n错误: 安装过程意外结束。';
+                installProgressLog.scrollTop = installProgressLog.scrollHeight;
+                showToast('安装失败: 过程意外结束', 'error');
+
+            } catch (error) {
+                installProgressLog.textContent += `\n错误: ${error.message}`;
+                installProgressLog.scrollTop = installProgressLog.scrollHeight;
+                showToast('安装失败: ' + error.message, 'error');
+            } finally {
+                installPluginBtn.disabled = false;
+            }
+        }
+        
+        window.addEventListener('load', function() {
+            loadConfigs();
+        });
+    </script>
+</body>
+</html>

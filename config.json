@@ -1,0 +1,20 @@
+{
+  "answer": [
+    114,
+    3803,
+    114514
+  ],
+  "auto_reload_plugins": true,
+  "bot_name": "Lunar X",
+  "bot_name_en": "Lunar X",
+  "bot_qq": 179495819,
+  "deepseek_key": "sk-191e3b6e0dec47dabdd0c5c0ed609425",
+  "default_mode": "Ds",
+  "gemini_key": "AIzaSyCHxl37ngb2yDahz9PN5yrUq8MIX43nD_Q",
+  "log_level": "INFO",
+  "openai_key": "",
+  "root_user": 1348472639,
+  "token": "114514",
+  "trigger_keyword": "$",
+  "ws_server": "ws://127.0.0.1:3803"
+}
