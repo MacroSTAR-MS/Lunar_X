@@ -31,3 +31,7 @@ Lunar X是一个适配OneBot v11协议的机器人框架，旨在提供一个方
 [Albert Xia](https://github.com/MSAlbertXia)
 
 部分代码使用[DeepSeek](https://chat.deepseek.com/)完成
+
+<div align="center">
+Copyright © 2025 MacroSTAR. All Rights Reserved.
+</div>
