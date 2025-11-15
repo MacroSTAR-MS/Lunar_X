@@ -9,17 +9,17 @@
 
 ---
 
-> [!Important]
->
-> Lunar X仍在开发中，当前版本:Developer Beta 0.1.0.122。
-> 
-> 先行者计划交流群：870235320
->
-> 有意见欢迎提出，与我们一同构建宏伟星河！
+>[!Caution]
+>你现在正在查看的是开发预览版本！当前版本:Developer Beta 0.1.0.122。
 
 ## 概览
 
 Lunar X是一个适配OneBot v11协议的机器人框架，旨在提供一个方便、高效、超强拓展性的机器人运行结构。
+
+>[!Important]
+>由于Lagrange V1不再维护，且Lagrange V2不兼容OneBot协议转而兼容Milky协议，所以Lunar X接下来的开发规划如[宣传片](https://www.bilibili.com/video/BV1hUxEzXE16/)中所说，「更兼容Lagrange V1、V2*」，我们会推出两个大版本，一个兼容V1，一个兼容V2，后续所有版本将只兼容V2，对您造成的不便敬请谅解！
+>
+>更新：请等待后续通知，有新更改
 
 ## 快速开始
 
